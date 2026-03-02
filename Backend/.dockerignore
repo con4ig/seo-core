@@ -1,0 +1,16 @@
+.env
+.env.*
+!.env.example
+node_modules
+.tmp
+.cache
+build
+dist
+.git
+.gitignore
+*.log
+*.md
+debug_mock_output.log
+.strapi-updater.json
+.strapi
+types
