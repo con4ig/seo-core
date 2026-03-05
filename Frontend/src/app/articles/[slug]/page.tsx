@@ -1,4 +1,4 @@
-import { Metadata, ResolvingMetadata } from "next";
+import { Metadata } from "next";
 import { Navbar } from "@/components/blocks/Navbar";
 import { BlocksRenderer } from "@strapi/blocks-react-renderer";
 import { fetchAPI } from "@/lib/api";
@@ -21,17 +21,36 @@ async function getArticle(slug: string) {
   return response?.data?.[0];
 }
 
-export async function generateMetadata(
-  { params }: Props,
-  parent: ResolvingMetadata,
-): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const article = await getArticle(slug);
   if (!article) return {};
 
+  const seo = article.seo;
+  const url = `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/articles/${slug}`;
+
   return {
-    title: article.seo?.metaTitle || article.title,
-    description: article.seo?.metaDescription || article.description,
+    title: seo?.metaTitle || article.title,
+    description: seo?.metaDescription || article.description,
+    keywords: seo?.keywords
+      ? seo.keywords.split(",").map((k) => k.trim())
+      : undefined,
+    robots: seo?.metaRobots || "index, follow",
+    alternates: {
+      canonical: url,
+    },
+    openGraph: {
+      title: seo?.metaTitle || article.title,
+      description: seo?.metaDescription || article.description,
+      url: url,
+      type: "article",
+      publishedTime: article.publishedAt,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: seo?.metaTitle || article.title,
+      description: seo?.metaDescription || article.description,
+    },
   };
 }
 
@@ -46,26 +65,49 @@ export default async function ArticlePage({ params }: Props) {
   return (
     <>
       <Navbar />
+      {article.seo?.structuredData && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(article.seo.structuredData),
+          }}
+        />
+      )}
       <main className="max-w-4xl mx-auto px-6 py-20">
         <header className="mb-12">
           <p className="font-mono text-xs text-muted mb-4 uppercase tracking-widest">
-            {new Date(article.publishedAt).toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
+            <time
+              dateTime={new Date(article.publishedAt).toISOString()}
+              itemProp="datePublished"
+            >
+              {new Date(article.publishedAt).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </time>
           </p>
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
+          <h1
+            className="text-4xl md:text-5xl font-bold tracking-tight mb-6"
+            itemProp="headline"
+          >
             {article.title}
           </h1>
           {article.description && (
-            <p className="text-xl text-muted leading-relaxed">
+            <p
+              className="text-xl text-muted leading-relaxed"
+              itemProp="description"
+            >
               {article.description}
             </p>
           )}
         </header>
 
-        <article className="prose prose-lg dark:prose-invert max-w-none pb-20 border-b border-border">
+        <article
+          itemScope
+          itemType="https://schema.org/Article"
+          className="prose prose-lg dark:prose-invert max-w-none pb-20 border-b border-border"
+        >
           <BlocksRenderer content={article.content} />
         </article>
 

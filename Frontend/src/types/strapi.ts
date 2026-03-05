@@ -33,6 +33,18 @@ export interface StrapiArticle {
     metaDescription?: string;
     keywords?: string;
     metaRobots?: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     structuredData?: any;
   };
+}
+
+export interface StrapiCategory {
+  id: number;
+  documentId: string;
+  name: string;
+  slug: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
 }
