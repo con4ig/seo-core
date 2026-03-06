@@ -1,0 +1,25 @@
+.git
+.tmp
+.cache
+.strapi
+build
+node_modules
+dist
+
+# Exclude Frontend from Strapi build context
+Frontend
+
+# Exclude specific Strapi backend folders
+Backend/node_modules
+Backend/.tmp
+Backend/.cache
+Backend/build
+
+# Exclude plugin source and node_modules (we only need dist)
+strapi-plugin-seo-gemini/node_modules
+strapi-plugin-seo-gemini/admin
+strapi-plugin-seo-gemini/server
+
+# Large data folders
+npm-data
+npm-letsencrypt

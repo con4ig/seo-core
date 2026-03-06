@@ -8,3 +8,4 @@ dist
 .tmp
 .DS_Store
 nul
+strapi-plugin-seo-gemini/

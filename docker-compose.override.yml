@@ -7,12 +7,16 @@ services:
     volumes:
       # Map the entire application folder - this is the most secure solution
       - ./Backend:/opt/app
+      # Plugin must be explicitly mounted - the ./Backend:/opt/app overlay would otherwise hide it
+      - ./strapi-plugin-seo-gemini:/opt/app/strapi-plugin-seo-gemini
       # The following lines are "Anonymous Volumes" - protecting against permission and file structure issues
       - /opt/app/node_modules
       - /opt/app/.cache
       - /opt/app/build
       - /opt/app/dist
       - /opt/app/.tmp
+      # Protect the plugin's node_modules from being overwritten by the anonymous volume above
+      - /opt/app/strapi-plugin-seo-gemini/node_modules
     # Ensure command is 'develop' in dev mode to enable Content-Type Builder
     command: npm run develop
     ports:

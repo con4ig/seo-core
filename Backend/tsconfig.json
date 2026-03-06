@@ -15,17 +15,7 @@
     "outDir": "dist",
     "rootDir": "."
   },
-  "include": [
-    // Include root files
-    "./",
-    // Include all ts files
-    "./**/*.ts",
-    // Include all js files
-    "./**/*.js",
-    // Force the JSON files in the src folder to be included
-    "src/**/*.json"
-  ],
-
+  "include": ["./src/**/*.ts", "./config/**/*.ts", "src/**/*.json"],
   "exclude": [
     "node_modules/",
     "build/",
@@ -33,12 +23,10 @@
     ".cache/",
     ".tmp/",
     ".strapi/",
-
-    // Do not include admin files in the server compilation
     "src/admin/",
-    // Do not include test files
     "**/*.test.*",
-    // Do not include plugins in the server compilation
-    "src/plugins/**"
+    "src/plugins/**",
+    // Explicitly exclude the local plugin - it ships its own tsconfig with jsx enabled
+    "strapi-plugin-seo-gemini/**"
   ]
 }
