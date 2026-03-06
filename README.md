@@ -87,3 +87,7 @@ This project perfectly balances extreme technical optimization with an elegant, 
 This repository acts as a comprehensive demonstration of the integration between modern headless architectures, programmatic SEO optimization, and LLM (Large Language Model) agents working securely in the background.
 
 To explore the exact iterative process behind this system's architecture, browse the commit history! All features were structured under the standard Conventional Commits formats.
+
+## Contributing
+
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details on how to get started, our technical architecture, and the project roadmap.
